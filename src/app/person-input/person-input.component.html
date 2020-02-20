@@ -1,0 +1,5 @@
+<form [formGroup]="personForm" (submit)="submitted()">
+  <label for="name">Name</label>
+  <input type="text" name="name" formControlName="name" />
+  <button type="submit">Verzenden</button>
+</form>
