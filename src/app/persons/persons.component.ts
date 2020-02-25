@@ -1,21 +1,34 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { PersonsService } from "./persons.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-persons",
   templateUrl: "./persons.component.html",
   styleUrls: ["./persons.component.scss"]
 })
-export class PersonsComponent implements OnInit {
-  persons: string[];
+export class PersonsComponent implements OnInit, OnDestroy {
+  persons: String[];
+  personsSubscription: Subscription;
 
-  constructor() {
-    this.persons = ["Max", "Mule", "Rider"];
+  constructor(private personsService: PersonsService) {
+    this.personsService.fetchPersons();
+    this.personsSubscription = personsService.personsChanged.subscribe(
+      newPersons => (this.persons = newPersons)
+    );
   }
 
   ngOnInit() {}
 
+  ngOnDestroy(): void {
+    this.personsSubscription.unsubscribe();
+  }
+
+  deletePerson(person: String) {
+    this.personsService.removePerson(person);
+  }
+
   submit(event: string) {
-    console.log(`Event with data: ${event}`);
-    this.persons.push(event);
+    this.personsService.addPerson(event);
   }
 }

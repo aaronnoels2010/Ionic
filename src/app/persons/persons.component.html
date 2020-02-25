@@ -1,4 +1,6 @@
 <app-person-input (onSubmit)="submit($event)"></app-person-input>
 <ul>
-  <li *ngFor="let person of persons">{{ person }}</li>
+  <li *ngFor="let person of persons" (click)="deletePerson(person)">
+    {{ person }}
+  </li>
 </ul>
